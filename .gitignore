@@ -40,3 +40,6 @@ buildNumber.properties
 **/.idea
 *.iml
 data
+notification-service/.mvn/
+notification-service/mvnw
+notification-service/mvnw.cmd

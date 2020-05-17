@@ -2,22 +2,18 @@ package com.thejavacademy.userservice.service;
 
 import com.thejavacademy.userservice.exception.UserServiceException;
 import com.thejavacademy.userservice.mapper.UserMapper;
-import com.thejavacademy.userservice.model.dto.SearchUserResponse;
 import com.thejavacademy.userservice.model.dto.UserIdentity;
 import com.thejavacademy.userservice.model.dto.UserResponse;
 import com.thejavacademy.userservice.model.entity.User;
-import com.thejavacademy.userservice.model.messages.UserEvent;
+import com.thejavacademy.userservice.service.adapters.UserStorageAdapter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 import static com.thejavacademy.userservice.exception.UserServiceException.ExceptionType.EMPTY_USER_ID;
 import static com.thejavacademy.userservice.exception.UserServiceException.ExceptionType.USER_NOT_FOUND;
+
 @Slf4j
 @Service
 public class UserService {
@@ -25,10 +21,14 @@ public class UserService {
 
     private UserStorageAdapter userStorageAdapter;
     private KafkaUserProducer kafkaUserProducer;
+    private ESUserStorageAdapter esUserStorageAdapter;
 
-    public UserService(UserStorageAdapter userStorageAdapter, KafkaUserProducer kafkaUserProducer) {
+    public UserService(UserStorageAdapter userStorageAdapter,
+                       KafkaUserProducer kafkaUserProducer,
+                       ESUserStorageAdapter esUserStorageAdapter) {
         this.userStorageAdapter = userStorageAdapter;
         this.kafkaUserProducer = kafkaUserProducer;
+        this.esUserStorageAdapter = esUserStorageAdapter;
     }
 
 
@@ -50,24 +50,29 @@ public class UserService {
         userStorageAdapter.deleteUser(id);
     }
 
-
-
-    //TODO not sure what to do here. Ask about blbla
-    public SearchUserResponse getFriends(String id) {
-        Optional<User> userOptional = userStorageAdapter.getUserById(id);
-        if(userOptional.isPresent()) {
-            kafkaUserProducer.sendUserEvent(UserMapper.userToUserEvent(userOptional.get()));
-            log.info("User sent to topic");
+    public List<UserIdentity> getFriends(String id) {
+        if (id == null || id.trim().isEmpty()) {
+            throw new UserServiceException(EMPTY_USER_ID);
         }
-        return userStorageAdapter.getUserFriends(id);
+        userStorageAdapter.getUserById(id).orElseThrow(() -> new UserServiceException(USER_NOT_FOUND));
+        try {
+            return userStorageAdapter.getUserFriends(id);
+        } catch (Exception ex) {
+            throw new UserServiceException(UserServiceException.ExceptionType.SERVER_ERROR);
+        }
     }
 
     public User save(User user) {
-        return userStorageAdapter.save(user);
+        final User dbUser = userStorageAdapter.save(user);
+        esUserStorageAdapter.save(user);
+        return dbUser;
     }
 
-    //TODO:delete this method after testing
     public List<UserIdentity> getUsers() {
         return userStorageAdapter.getUsers();
+    }
+
+    public List<UserIdentity> searchUsers(String term) {
+        return esUserStorageAdapter.searchUsers(term);
     }
 }

@@ -1,6 +1,5 @@
 package com.thejavacademy.userservice.controller;
 
-import com.thejavacademy.userservice.model.dto.SearchUserResponse;
 import com.thejavacademy.userservice.model.dto.UserIdentity;
 import com.thejavacademy.userservice.model.dto.UserResponse;
 import com.thejavacademy.userservice.model.entity.User;
@@ -36,8 +35,8 @@ public class UserRestController {
 
 
     @GetMapping("/{id}/friends")
-    public ResponseEntity<SearchUserResponse> searchUserFriends(@PathVariable String id) {
-        SearchUserResponse response = userService.getFriends(id);
+    public ResponseEntity<List<UserIdentity>> searchUserFriends(@PathVariable String id) {
+        List<UserIdentity> response = userService.getFriends(id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -57,5 +56,10 @@ public class UserRestController {
     public ResponseEntity<?> deleteUser(@PathVariable String id){
         userService.deleteUser(id);
         return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+    }
+
+    @GetMapping("/search/{term}")
+    public ResponseEntity<List<UserIdentity>> searchUsers(@PathVariable String term) {
+        return ResponseEntity.ok(userService.searchUsers(term));
     }
 }

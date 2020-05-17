@@ -1,10 +1,12 @@
 package com.thejavacademy.userservice.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Data
@@ -13,15 +15,17 @@ import java.util.Objects;
 public class User {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private String id;
+    @Column(nullable = false, unique = true)
     private String username;
     @Column(name="lastname")
     private String lastName;
     @Column(name="firstname")
     private String firstName;
     private String profilePicture;
+    @Column(nullable = false, unique = true)
     private String email;
+    @Column(nullable = false, unique = true)
     private String phoneNumber;
 
 

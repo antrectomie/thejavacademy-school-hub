@@ -1,4 +1,4 @@
-package com.thejavacademy.userservice.service;
+package com.thejavacademy.userservice.service.adapters;
 
 import com.thejavacademy.userservice.exception.UserServiceException;
 import com.thejavacademy.userservice.model.dto.FriendshipRequest;
