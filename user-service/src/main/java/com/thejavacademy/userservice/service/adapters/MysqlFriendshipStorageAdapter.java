@@ -31,10 +31,9 @@ public class MysqlFriendshipStorageAdapter implements FriendshipStorageAdapter {
 
     @Override
     public Friendship getFriendship(String userOneId, String userTwoId) {
-        Friendship friendship = new Friendship();
-        friendship.setFriends(userOneId, userTwoId);
+        Friendship friendship = new Friendship(userOneId, userTwoId);
         return friendshipRepo.findFriendship(friendship.getUserOneId(), friendship.getUserTwoId())
-                .orElse(new Friendship());
+                .orElse(new Friendship(null, null));
     }
 
     @Override

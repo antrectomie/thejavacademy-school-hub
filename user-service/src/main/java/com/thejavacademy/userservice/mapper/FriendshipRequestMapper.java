@@ -11,8 +11,7 @@ public class FriendshipRequestMapper {
 
 
     public static Friendship dtoToEntity(FriendshipRequest friendshipRequest) {
-        Friendship friendship = new Friendship();
-        friendship.setFriends(friendshipRequest.getUserOneId(), friendshipRequest.getUserTwoId());
+        Friendship friendship = new Friendship(friendshipRequest.getUserOneId(), friendshipRequest.getUserTwoId());
         friendship.setRelationshipStatus(friendshipRequest.getActionType());
         friendship.setActionUserId(friendshipRequest.getTriggeredBy());
         if (friendshipRequest.getId() == null && friendshipRequest.getActionType().equals(ActionType.REQUESTED)) {
