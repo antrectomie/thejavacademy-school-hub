@@ -17,4 +17,6 @@ public interface UserStorageAdapter {
     void deleteUser(String id);
 
     List<UserIdentity> getUsers();
+
+    Optional<User> getUserByEmail(String email);
 }

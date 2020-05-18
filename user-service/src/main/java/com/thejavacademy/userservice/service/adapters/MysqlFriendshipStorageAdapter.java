@@ -6,6 +6,8 @@ import com.thejavacademy.userservice.model.dto.FriendshipRequest;
 import com.thejavacademy.userservice.model.entity.Friendship;
 import com.thejavacademy.userservice.repo.MySqlFriendshipRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -30,6 +32,7 @@ public class MysqlFriendshipStorageAdapter implements FriendshipStorageAdapter {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public Friendship getFriendship(String userOneId, String userTwoId) {
         Friendship friendship = new Friendship(userOneId, userTwoId);
         return friendshipRepo.findFriendship(friendship.getUserOneId(), friendship.getUserTwoId())
@@ -37,6 +40,7 @@ public class MysqlFriendshipStorageAdapter implements FriendshipStorageAdapter {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public Friendship create(Friendship friendship) {
         if ( friendshipRepo.findFriendship(friendship.getUserOneId(), friendship.getUserTwoId()).isPresent()){
             throw new UserServiceException(FRIENDSHIP_EXISTS);

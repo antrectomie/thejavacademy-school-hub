@@ -21,5 +21,6 @@ public class UserIdentity {
     private String firstName;
     private String email;
     private String profilePicture;
+    private String phoneNumber;
 
 }

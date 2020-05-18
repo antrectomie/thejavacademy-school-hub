@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.thejavacademy.userservice.exception.UserServiceException.ExceptionType.EMPTY_USER_ID;
 import static com.thejavacademy.userservice.exception.UserServiceException.ExceptionType.USER_NOT_FOUND;
@@ -30,7 +31,6 @@ public class UserService {
         this.kafkaUserProducer = kafkaUserProducer;
         this.esUserStorageAdapter = esUserStorageAdapter;
     }
-
 
 
 
@@ -74,5 +74,9 @@ public class UserService {
 
     public List<UserIdentity> searchUsers(String term) {
         return esUserStorageAdapter.searchUsers(term);
+    }
+
+    public Optional<User> getUserByEmail(String email) {
+        return userStorageAdapter.getUserByEmail(email);
     }
 }

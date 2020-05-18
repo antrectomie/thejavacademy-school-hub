@@ -3,6 +3,7 @@ package com.thejavacademy.userservice.service.adapters;
 import com.thejavacademy.userservice.exception.UserServiceException;
 import com.thejavacademy.userservice.mapper.UserMapper;
 import com.thejavacademy.userservice.model.dto.UserIdentity;
+import com.thejavacademy.userservice.model.dto.UserResponse;
 import com.thejavacademy.userservice.model.entity.Friendship;
 import com.thejavacademy.userservice.model.entity.User;
 import com.thejavacademy.userservice.repo.MySqlUserRepo;
@@ -57,6 +58,13 @@ public class MysqlUserStorageAdapter implements UserStorageAdapter {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public Optional<User> getUserByEmail(String email) {
+        if(email.isEmpty() || email == null){
+            throw new UserServiceException(UserServiceException.ExceptionType.EMPTY_USER_ID);
+        }
+       return  userRepo.findByEmail(email);
+    }
 
 
     @Override
