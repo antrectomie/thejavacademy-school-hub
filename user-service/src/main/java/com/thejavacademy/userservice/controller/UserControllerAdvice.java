@@ -25,7 +25,6 @@ public class UserControllerAdvice extends ResponseEntityExceptionHandler {
                 break;
             case EMPTY_USER_ID:
                 errorResponseEntity = new ResponseEntity<>(new ApiError(ex.getType().getCode(), ex.getType().getMessage()), HttpStatus.BAD_REQUEST);
-
                 break;
             default:
                 errorResponseEntity = new ResponseEntity<>(new ApiError(500, "Service Temporary Unavailble"), HttpStatus.BAD_REQUEST);

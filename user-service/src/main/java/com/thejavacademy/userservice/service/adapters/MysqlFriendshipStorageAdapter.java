@@ -1,4 +1,4 @@
-package com.thejavacademy.userservice.service;
+package com.thejavacademy.userservice.service.adapters;
 
 import com.thejavacademy.userservice.exception.UserServiceException;
 import com.thejavacademy.userservice.mapper.FriendshipRequestMapper;
@@ -8,7 +8,6 @@ import com.thejavacademy.userservice.repo.MySqlFriendshipRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.thejavacademy.userservice.exception.UserServiceException.ExceptionType.*;
 

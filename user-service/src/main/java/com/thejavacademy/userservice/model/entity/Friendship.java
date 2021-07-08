@@ -16,7 +16,6 @@ import javax.persistence.*;
 public class Friendship {
 
     @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
     private String userOneId;
     private String userTwoId;

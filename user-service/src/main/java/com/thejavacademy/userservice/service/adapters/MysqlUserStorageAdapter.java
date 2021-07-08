@@ -1,15 +1,11 @@
-package com.thejavacademy.userservice.service;
+package com.thejavacademy.userservice.service.adapters;
 
-import com.thejavacademy.userservice.exception.FriendshipServiceException;
 import com.thejavacademy.userservice.exception.UserServiceException;
 import com.thejavacademy.userservice.mapper.UserMapper;
-import com.thejavacademy.userservice.model.dto.SearchUserResponse;
-import com.thejavacademy.userservice.model.dto.SearchedUser;
 import com.thejavacademy.userservice.model.dto.UserIdentity;
 import com.thejavacademy.userservice.model.entity.Friendship;
 import com.thejavacademy.userservice.model.entity.User;
 import com.thejavacademy.userservice.repo.MySqlUserRepo;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -62,25 +58,18 @@ public class MysqlUserStorageAdapter implements UserStorageAdapter {
     }
 
 
-    @Override
-    public SearchUserResponse searchUser(String term) {
-
-        return null;
-    }
-
 
     @Override
-    public SearchUserResponse getUserFriends(String id) {
-        SearchUserResponse searchUserResponse = new SearchUserResponse();
+    public List<UserIdentity> getUserFriends(String id) {
+
 
         List<Friendship> listOfFriendships = friendshipStorageAdapter.getFriendships(id);
         List<String> usersIds = extractFriendsIds(listOfFriendships, id);
         List<User> listOfFriends = userRepo.findByIdIn(usersIds);
-        List<SearchedUser> searchedUsers = listOfFriends.stream().map(UserMapper::entityToDto)
+        return listOfFriends.stream()
+                .map(UserMapper::entityToDto)
                 .collect(Collectors.toList());
 
-        searchUserResponse.setUsers(searchedUsers);
-        return searchUserResponse;
     }
 
     /**

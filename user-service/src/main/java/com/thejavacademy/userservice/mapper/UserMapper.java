@@ -1,30 +1,23 @@
 package com.thejavacademy.userservice.mapper;
 
-import com.thejavacademy.userservice.model.dto.SearchedUser;
+import com.thejavacademy.userservice.model.UserElastic;
 import com.thejavacademy.userservice.model.dto.UserContact;
 import com.thejavacademy.userservice.model.dto.UserIdentity;
 import com.thejavacademy.userservice.model.dto.UserResponse;
 import com.thejavacademy.userservice.model.entity.User;
 import com.thejavacademy.userservice.model.messages.UserEvent;
 
-import java.util.Optional;
-
 public class UserMapper {
 
 
-    public static SearchedUser entityToDto(User user){
-        SearchedUser searchedUser = new SearchedUser();
+    public static UserIdentity entityToDto(User user) {
         UserIdentity userIdentity = buildUserIdentity(user);
-        if(user != null){
-            searchedUser.setProfilePicture(user.getProfilePicture());
-            searchedUser.setUserIdentity(userIdentity);
-        }
-        return searchedUser;
+        return userIdentity;
     }
 
-    public static UserEvent userToUserEvent(User user){
+    public static UserEvent toUserEvent(User user) {
         UserEvent userEvent = new UserEvent();
-        if(user != null){
+        if (user != null) {
             userEvent.setId(user.getId());
             userEvent.setUsername(user.getUsername());
             userEvent.setEmail(user.getEmail());
@@ -32,11 +25,11 @@ public class UserMapper {
             userEvent.setPhoneNumber(user.getPhoneNumber());
             userEvent.setProfilePicture(user.getProfilePicture());
         }
-       //return Optional.of(userEvent);
+        //return Optional.of(userEvent);
         return userEvent;
     }
 
-    public static UserResponse userToUserResponse(User user){
+    public static UserResponse userToUserResponse(User user) {
         UserResponse userResponse = new UserResponse();
         UserContact userContact = new UserContact();
         userContact.setPhoneNumber(user.getPhoneNumber());
@@ -47,15 +40,34 @@ public class UserMapper {
         return userResponse;
     }
 
-
-//TODO: change accesor to private
-    public static UserIdentity buildUserIdentity(User user){
+    public static UserIdentity buildUserIdentity(User user) {
         UserIdentity userIdentity = new UserIdentity();
         userIdentity.setUsername(user.getUsername());
         userIdentity.setProfilePicture(user.getProfilePicture());
         userIdentity.setLastName(user.getLastName());
         userIdentity.setFirstName(user.getFirstName());
+        userIdentity.setEmail(user.getEmail());
         userIdentity.setId(user.getId());
         return userIdentity;
+    }
+
+    public static UserElastic toUserElastic(User user) {
+        return UserElastic.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .build();
+    }
+
+    public static UserIdentity toUserIdentityDto(UserElastic userElastic) {
+        return UserIdentity.builder()
+                .id(userElastic.getId())
+                .username(userElastic.getUsername())
+                .firstName(userElastic.getFirstName())
+                .lastName(userElastic.getLastName())
+                .profilePicture(userElastic.getProfilePicture())
+                .build();
     }
 }

@@ -3,6 +3,7 @@ package com.thejavacademy.userservice.service;
 import com.thejavacademy.userservice.mapper.FriendshipRequestMapper;
 import com.thejavacademy.userservice.model.dto.FriendshipRequest;
 import com.thejavacademy.userservice.model.entity.Friendship;
+import com.thejavacademy.userservice.service.adapters.FriendshipStorageAdapter;
 import org.springframework.stereotype.Service;
 
 @Service
